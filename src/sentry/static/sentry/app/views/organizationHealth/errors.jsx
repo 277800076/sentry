@@ -38,7 +38,7 @@ const ReleasesRequest = withApi(
 
       try {
         const releases = await api.requestPromise(
-          `/projects/${organization.slug}/releases/`,
+          `/organizations/${organization.slug}/releases/`,
           {
             query: {
               per_page: limit,
