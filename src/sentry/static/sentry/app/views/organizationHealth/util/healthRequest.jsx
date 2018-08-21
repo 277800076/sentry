@@ -14,7 +14,6 @@ class HealthRequestWithParams extends React.Component {
     /**
      * API client instance
      */
-<<<<<<< HEAD
     api: PropTypes.object.isRequired,
 
     organization: SentryTypes.Organization.isRequired,
@@ -24,12 +23,6 @@ class HealthRequestWithParams extends React.Component {
      */
     tag: PropTypes.string.isRequired,
 
-=======
-    api: PropTypes.object,
-
-    organization: SentryTypes.Organization.isRequired,
-
->>>>>>> dbc5104210... fix tests
     /**
      * Health tag (this will use a BASE_URL defined in health actionCreators
      */
@@ -173,11 +166,12 @@ const HealthRequest = withLatestContext(
       render() {
         return (
           <HealthContext.Consumer>
-            {({projects, environments, period}) => (
+            {({projects, environments, period, filters}) => (
               <HealthRequestWithParams
                 projects={projects}
                 environments={environments}
                 period={period}
+                filters={filters}
                 {...this.props}
               />
             )}
