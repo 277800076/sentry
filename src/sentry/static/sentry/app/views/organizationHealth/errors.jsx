@@ -32,7 +32,6 @@ const ReleasesRequest = withApi(
 
     async componentDidMount() {
       // fetch releases
-      console.log(this.props);
       let {api, organization, limit} = this.props;
       if (!organization) return;
 
@@ -50,7 +49,6 @@ const ReleasesRequest = withApi(
         this.setState({
           data: releases,
         });
-        console.log('releases', releases);
       } catch (err) {
         addErrorMessage(t('Unable to fetch releases'));
       }
@@ -112,7 +110,7 @@ const OrganizationHealthErrors = styled(
               tag="error.handled"
               timeseries={true}
               interval="1d"
-              getCategory={handled => (handled ? 'Handled' : 'Crash')}
+              getCategory={({value}) => (value ? 'Handled' : 'Crash')}
             >
               {({data, loading}) => {
                 if (!data) return null;
@@ -144,10 +142,7 @@ const OrganizationHealthErrors = styled(
                         ) : (
                           <div
                             onClick={() =>
-                              this.handleSetFilter(
-                                tag,
-                                value[tag].email || value[tag].id
-                              )}
+                              this.handleSetFilter(tag, value[tag].health_id)}
                           >
                             <IdBadge
                               user={value.user}
@@ -193,7 +188,12 @@ const OrganizationHealthErrors = styled(
             </ReleasesRequest>
           </Flex>
           <Flex>
-            <HealthRequest tag="error.type" timeseries={false} interval="1d">
+            <HealthRequest
+              tag="error.type"
+              getCategory={({value}) => value}
+              timeseries={false}
+              interval="1d"
+            >
               {({data, loading}) => {
                 if (!data) return null;
                 return (
@@ -233,7 +233,7 @@ const OrganizationHealthErrors = styled(
                               <Flex justify="space-between">
                                 <ReleaseName
                                   onClick={() =>
-                                    this.handleSetFilter(tag, value[tag].version)}
+                                    this.handleSetFilter(tag, value[tag].health_id)}
                                 >
                                   {value[tag].shortVersion}
                                 </ReleaseName>

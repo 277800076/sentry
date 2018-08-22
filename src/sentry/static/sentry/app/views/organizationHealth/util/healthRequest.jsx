@@ -24,11 +24,6 @@ class HealthRequestWithParams extends React.Component {
     tag: PropTypes.string.isRequired,
 
     /**
-     * Health tag (this will use a BASE_URL defined in health actionCreators
-     */
-    tag: PropTypes.string.isRequired,
-
-    /**
      * List of project ids to query
      */
     projects: PropTypes.arrayOf(PropTypes.string),
@@ -117,9 +112,9 @@ class HealthRequestWithParams extends React.Component {
     data.forEach(([timestamp, resultsForTimestamp]) => {
       resultsForTimestamp &&
         !!resultsForTimestamp.length &&
-        resultsForTimestamp.forEach(({count, [tag]: name}) => {
-          categorySet.add(getCategory(name));
-          timestampMap.set(`${timestamp}-${getCategory(name)}`, count);
+        resultsForTimestamp.forEach(({count, [tag]: tagObject}) => {
+          categorySet.add(getCategory(tagObject));
+          timestampMap.set(`${timestamp}-${getCategory(tagObject)}`, count);
         });
     });
 
@@ -135,13 +130,13 @@ class HealthRequestWithParams extends React.Component {
   };
 
   transformData = () => {
-    let {timeseries, tag} = this.props;
+    let {timeseries, tag, getCategory} = this.props;
     let {data} = this.state;
     if (!data) return null;
 
     return timeseries
       ? this.transformTimeseriesData()
-      : data.map(({[tag]: name, count}) => [name, count]);
+      : data.map(({[tag]: tagObject, count}) => [getCategory(tagObject), count]);
   };
 
   render() {
